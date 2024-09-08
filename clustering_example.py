@@ -17,6 +17,8 @@ hclust_labels = hclust.fit_predict(X)  # Fit the model and predict cluster label
 kmeans = KMeans(n_clusters=2)
 kmeans_labels = kmeans.fit_predict(X)  # Fit the model and predict cluster labels
 
+# This code demonstrates the difference between Hierarchical Clustering and K-Means Clustering
+# on a moon-shaped dataset, showcasing their strengths and weaknesses in clustering
 # Plot the clustering results
 plt.figure(figsize=(10, 5))  # Create a figure with size 10x5
 
