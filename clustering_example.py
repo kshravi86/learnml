@@ -33,3 +33,33 @@ plt.scatter(X[:, 0], X[:, 1], c=kmeans_labels)  # Scatter plot with cluster labe
 plt.title("K-Means Clustering")  # Set title for the subplot
 
 plt.show()
+
+# Limitations of Gaussian Mixture Models (GMMs) for clustering
+# ======================================================
+
+# 1. GMMs assume spherical clusters
+# GMMs are sensitive to the scale of the features, which can lead to poor clustering results
+from sklearn.mixture import GaussianMixture
+gmm = GaussianMixture(n_components=2)
+gmm_labels = gmm.fit_predict(X)
+
+# Plot GMM clustering results
+plt.figure(figsize=(5, 5))
+plt.scatter(X[:, 0], X[:, 1], c=gmm_labels)
+plt.title("Gaussian Mixture Model Clustering")
+plt.show()
+
+# 2. GMMs are sensitive to the initial placement of centroids
+# GMMs can get stuck in local optima, leading to poor clustering results
+gmm_init_bad = GaussianMixture(n_components=2, init_params='random')
+gmm_init_bad_labels = gmm_init_bad.fit_predict(X)
+
+# Plot GMM clustering results with bad initialization
+plt.figure(figsize=(5, 5))
+plt.scatter(X[:, 0], X[:, 1], c=gmm_init_bad_labels)
+plt.title("Gaussian Mixture Model Clustering with Bad Initialization")
+plt.show()
+
+# 3. GMMs can be computationally expensive for high-dimensional data
+# GMMs have a time complexity of O(n*d*k), where n is the number of samples, d is the number of features, and k is the number of components
+# This can make them impractical for large datasets
