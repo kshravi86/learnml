@@ -12,6 +12,17 @@ model.add(Conv2D(64, (3, 3), activation='relu'))
 model.add(Flatten())
 model.add(Dense(64, activation='relu'))
 model.add(Dense(10, activation='softmax'))
+# Import keras
+import keras
+
+# Load the dataset (e.g. CIFAR-10)
+from keras.datasets import cifar10
+(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+
+# Normalize pixel values to be between 0 and 1
+X_train = X_train.astype('float32') / 255
+X_test = X_test.astype('float32') / 255
+
 # Convert class vectors to binary class matrices
 y_train = keras.utils.to_categorical(y_train, 10)
 y_test = keras.utils.to_categorical(y_test, 10)
