@@ -2,41 +2,57 @@
 import numpy as np
 import gym
 
+# Game environment constants
+ENV_NAME = 'FrozenLake-v0'
+NUM_EPISODES = 1000
+
 # Create a simple game environment using the FrozenLake-v0 game from the gym library
-env = gym.make('FrozenLake-v0')
+env = gym.make(ENV_NAME)
+
+# Q-learning hyperparameters
+ALPHA = 0.1
+GAMMA = 0.9
+EPSILON = 0.1
 
 # Initialize the Q-table with zeros, where the number of rows is the number of states and the number of columns is the number of actions
 q_table = np.zeros([env.observation_space.n, env.action_space.n])
 
-# Set the learning rate (alpha), discount factor (gamma), and exploration rate (epsilon) for the Q-learning algorithm
-alpha = 0.1
-gamma = 0.9
-epsilon = 0.1
+def choose_action(state, epsilon):
+    """Choose an action using epsilon-greedy policy"""
+    if np.random.rand() < epsilon:
+        return env.action_space.sample()
+    else:
+        return np.argmax(q_table[state])
 
-# Train the agent using Q-learning
-for episode in range(1000):
+def update_q_table(state, action, next_state, reward):
+    """Update the Q-table"""
+    q_table[state, action] += ALPHA * (reward + GAMMA * np.max(q_table[next_state]) - q_table[state, action])
+
+def train_agent():
+    """Train the agent using Q-learning"""
+    for episode in range(NUM_EPISODES):
+        state = env.reset()
+        done = False
+        rewards = 0
+        while not done:
+            action = choose_action(state, EPSILON)
+            next_state, reward, done, _ = env.step(action)
+            rewards += reward
+            update_q_table(state, action, next_state, reward)
+            state = next_state
+        print(f'Episode {episode+1}, Total Rewards: {rewards}')
+
+def play_game():
+    """Use the trained Q-table to play the game"""
     state = env.reset()
     done = False
-    rewards = 0
     while not done:
-        # Choose an action using epsilon-greedy policy
-        if np.random.rand() < epsilon:
-            action = env.action_space.sample()
-        else:
-            action = np.argmax(q_table[state])
+        action = np.argmax(q_table[state])
+        state, _, done, _ = env.step(action)
+        env.render()
 
-        # Take the action and observe the next state and reward
-        next_state, reward, done, _ = env.step(action)
-        rewards += reward
-
-        # Update the Q-table
-        q_table[state, action] += alpha * (reward + gamma * np.max(q_table[next_state]) - q_table[state, action])
-
-        # Move to the next state
-        state = next_state
-
-    # Print the total rewards for each episode
-    print(f'Episode {episode+1}, Total Rewards: {rewards}')
+train_agent()
+play_game()
 
 # Use the trained Q-table to play the game
 state = env.reset()
