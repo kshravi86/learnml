@@ -1,6 +1,9 @@
-# Import the NumPy library, which provides support for large, multi-dimensional arrays and matrices.
+# Import the NumPy library, which provides support for large, multi-dimensional arrays and matrices for numerical computations.
+# This library is essential for efficient numerical computations in machine learning.
 import numpy as np
 # Import the necessary modules from the Keras library, which provides a high-level neural networks API.
+# Import the necessary modules from the Keras library, which provides a high-level neural networks API.
+# These modules are used to define the Convolutional Neural Network (CNN) model architecture.
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
