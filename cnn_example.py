@@ -60,4 +60,5 @@ X_train = X_train.astype('float32') / 255
 X_test = X_test.astype('float32') / 255
 
 
+loss, accuracy = model.evaluate(X_test, y_test)
 print(f'Test accuracy: {accuracy:.2f}')
