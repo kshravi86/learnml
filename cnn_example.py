@@ -9,25 +9,6 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
-# Define the Convolutional Neural Network (CNN) model using the Sequential API.
-# The model consists of multiple convolutional and max pooling layers, followed by fully connected layers.
-model = Sequential()
-# Add a convolutional layer with 32 filters, kernel size 3x3, and ReLU activation.
-model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)))
-# Add a max pooling layer with pool size 2x2.
-model.add(MaxPooling2D((2, 2)))
-# Add another convolutional layer with 64 filters, kernel size 3x3, and ReLU activation.
-model.add(Conv2D(64, (3, 3), activation='relu'))
-# Add another max pooling layer with pool size 2x2.
-model.add(MaxPooling2D((2, 2)))
-# Add a third convolutional layer with 64 filters, kernel size 3x3, and ReLU activation.
-model.add(Conv2D(64, (3, 3), activation='relu'))
-# Flatten the output of the convolutional layers to prepare for fully connected layers.
-model.add(Flatten())
-# Add a fully connected layer with 64 units and ReLU activation.
-model.add(Dense(64, activation='relu'))
-# Add a final fully connected layer with 10 units and softmax activation for output.
-model.add(Dense(10, activation='softmax'))
 # Import keras
 # Import the Keras library, which provides a high-level neural networks API.
 import keras
