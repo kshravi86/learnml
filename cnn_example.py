@@ -31,8 +31,24 @@ X_test = X_test.astype('float32') / 255
 y_train = keras.utils.to_categorical(y_train, 10)
 y_test = keras.utils.to_categorical(y_test, 10)
 
-# Compile the model
-# Compile the model with the Adam optimizer and categorical cross-entropy loss function.
+# Define the Convolutional Neural Network (CNN) model using the Sequential API.
+model = Sequential()
+# Add a convolutional layer with 32 filters, kernel size 3x3, and ReLU activation.
+model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)))
+# Add a max pooling layer with pool size 2x2.
+model.add(MaxPooling2D((2, 2)))
+# Add another convolutional layer with 64 filters, kernel size 3x3, and ReLU activation.
+model.add(Conv2D(64, (3, 3), activation='relu'))
+# Add another max pooling layer with pool size 2x2.
+model.add(MaxPooling2D((2, 2)))
+# Add a third convolutional layer with 64 filters, kernel size 3x3, and ReLU activation.
+model.add(Conv2D(64, (3, 3), activation='relu'))
+# Flatten the output of the convolutional layers to prepare for fully connected layers.
+model.add(Flatten())
+# Add a fully connected layer with 64 units and ReLU activation.
+model.add(Dense(64, activation='relu'))
+# Add a final fully connected layer with 10 units and softmax activation for output.
+model.add(Dense(10, activation='softmax'))
 # Compile the model with the Adam optimizer and categorical cross-entropy loss function.
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
@@ -43,13 +59,5 @@ from keras.datasets import cifar10
 X_train = X_train.astype('float32') / 255
 X_test = X_test.astype('float32') / 255
 
-# Train the model
-# Train the model on the training dataset with 10 epochs, batch size 32, and validation on the testing dataset.
-# Train the model on the training dataset with 10 epochs, batch size 32, and validation on the testing dataset.
-model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test), verbose=2)
 
-# Evaluate the model
-# Evaluate the model on the testing dataset and print the test accuracy.
-# Evaluate the model on the testing dataset and print the test accuracy.
-loss, accuracy = model.evaluate(X_test, y_test)
 print(f'Test accuracy: {accuracy:.2f}')
