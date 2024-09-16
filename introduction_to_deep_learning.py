@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 
 # Brief overview of deep learning
 print("Deep learning is a subset of machine learning that involves the use of artificial neural networks to model and solve complex problems.")
+# It is particularly useful for tasks such as image and speech recognition, natural language processing, and game playing.
 
 # Example of a simple neural network
 # Example of a simple neural network
