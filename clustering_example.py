@@ -18,29 +18,31 @@ kmeans_labels = kmeans.fit_predict(X)
 # Plot the clustering results
 plt.figure(figsize=(10, 5))
 
-# Plot Hierarchical Clustering results
+# Create a side-by-side comparison of Hierarchical and K-Means clustering
 plt.subplot(1, 2, 1)
 plt.scatter(X[:, 0], X[:, 1], c=hclust_labels, cmap='viridis')
-plt.title("Hierarchical Clustering")
+plt.title("Hierarchical Clustering")  # Ward linkage method works well for spherical clusters
 
-# Plot K-Means Clustering results
+# K-Means often struggles with non-spherical clusters like this moon dataset
 plt.subplot(1, 2, 2)
 plt.scatter(X[:, 0], X[:, 1], c=kmeans_labels, cmap='viridis')
 plt.title("K-Means Clustering")
 
 plt.show()
 
-# Perform Gaussian Mixture Model Clustering
+# GMM is more flexible than K-Means as it can capture non-spherical clusters
+# by modeling each cluster with its own covariance matrix
 gmm = GaussianMixture(n_components=2, random_state=42)
 gmm_labels = gmm.fit_predict(X)
 
-# Plot GMM clustering results
+# Plot GMM results - should handle moon shapes better than K-Means
 plt.figure(figsize=(5, 5))
 plt.scatter(X[:, 0], X[:, 1], c=gmm_labels, cmap='viridis')
 plt.title("Gaussian Mixture Model Clustering")
 plt.show()
 
-# Perform Gaussian Mixture Model Clustering with random initialization
+# Demonstrate how initialization affects GMM performance
+# Using random initialization instead of k-means++ can lead to suboptimal results
 gmm_init_bad = GaussianMixture(n_components=2, init_params='random', random_state=42)
 gmm_init_bad_labels = gmm_init_bad.fit_predict(X)
 
