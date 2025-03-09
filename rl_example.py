@@ -7,7 +7,7 @@ import gym
 # Game environment constants
 # Game environment constants
 # ENV_NAME is the name of the game environment
-ENV_NAME = 'FrozenLake-v0'
+ENV_NAME = 'FrozenLake-v1'
 # NUM_EPISODES is the number of episodes to train the agent
 NUM_EPISODES = 1000
 
