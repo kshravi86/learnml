@@ -22,22 +22,44 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train.reshape(-1, 64)).reshape(-1, 8, 8, 1)
 X_test = scaler.transform(X_test.reshape(-1, 64)).reshape(-1, 8, 8, 1)
 
-# Define a CNN model
-# This model consists of the following layers:
-# 1. A convolutional layer with 32 filters, kernel size (3, 3), and ReLU activation.
-# 2. A max pooling layer with pool size (2, 2) to downsample the feature maps.
-# 3. A flatten layer to prepare the output for the dense layers.
-# 4. A dense layer with 64 neurons and ReLU activation.
-# 5. A final dense layer with 10 neurons and softmax activation for output probabilities.
-model = keras.Sequential([
-    keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(8, 8, 1)),
-    keras.layers.MaxPooling2D((2, 2)),
-    keras.layers.Flatten(),
-    keras.layers.Dense(64, activation='relu'),
-    keras.layers.Dense(10, activation='softmax')
-])
+# Define a CNN model with proper input layer and error handling
+try:
+    # Define model using functional API
+    inputs = keras.Input(shape=(8, 8, 1))
+    x = keras.layers.Conv2D(32, (3, 3), activation='relu')(inputs)
+    x = keras.layers.MaxPooling2D((2, 2))(x)
+    x = keras.layers.Flatten()(x)
+    x = keras.layers.Dense(64, activation='relu')(x)
+    outputs = keras.layers.Dense(10, activation='softmax')(x)
+    model = keras.Model(inputs=inputs, outputs=outputs)
 
-model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    # Compile with reduced memory usage and fixed loss function
+    model.compile(
+        optimizer='adam',
+        loss='sparse_categorical_crossentropy',
+        metrics=['accuracy']
+    )
+
+    # Train with smaller batch size
+    history = model.fit(
+        X_train, 
+        y_train,
+        batch_size=32,  # Reduced batch size
+        epochs=10,
+        validation_data=(X_test, y_test)
+    )
+
+except tf.errors.UnknownError as e:
+    print("CUDA initialization failed. Falling back to CPU:")
+    # Force CPU usage
+    with tf.device('/CPU:0'):
+        model.fit(
+            X_train, 
+            y_train,
+            batch_size=32,
+            epochs=10,
+            validation_data=(X_test, y_test)
+        )
 
 """
 Mathematical Background of the CNN:
@@ -63,8 +85,6 @@ Mathematical Background of the CNN:
 4. Loss Function:
    - Sparse Categorical Cross Entropy: -Σ y_true * log(y_pred)
 """
-
-model.fit(X_train, y_train, epochs=10, validation_data=(X_test, y_test))
 
 # Print detailed mathematical computations
 def print_model_mathematics():
