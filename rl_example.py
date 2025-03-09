@@ -28,7 +28,11 @@ q_table = np.zeros([env.observation_space.n, env.action_space.n])
 
 # Choose an action using epsilon-greedy policy
 def choose_action(state, epsilon):
-    """Choose an action using epsilon-greedy policy"""
+    """
+    Epsilon-greedy action selection:
+    P(random action) = ε
+    P(greedy action) = 1 - ε
+    """
     # Randomly choose an action with probability epsilon
     if np.random.rand() < epsilon:
         return env.action_space.sample()
@@ -36,11 +40,33 @@ def choose_action(state, epsilon):
         # Choose the action with the highest Q-value
         return np.argmax(q_table[state])
 
+# Q-learning Mathematical Foundations:
+# Q(s,a) = Q(s,a) + α[R + γ * max(Q(s',a')) - Q(s,a)]
+# where:
+# - Q(s,a) is the Q-value for state s and action a
+# - α (alpha) is the learning rate (0 < α ≤ 1)
+# - R is the immediate reward
+# - γ (gamma) is the discount factor (0 ≤ γ ≤ 1)
+# - max(Q(s',a')) is the maximum Q-value for the next state
+#
+# The equation can be broken down into:
+# 1. Q(s,a): Current Q-value
+# 2. α: Learning rate that determines how much new information overrides old
+# 3. R + γ * max(Q(s',a')): Target Q-value
+#    - R: Immediate reward
+#    - γ * max(Q(s',a')): Discounted future reward
+# 4. [R + γ * max(Q(s',a')) - Q(s,a)]: Temporal Difference Error
+
 # Update the Q-table
 def update_q_table(state, action, next_state, reward):
-    """Update the Q-table"""
-    # Update the Q-value using the Q-learning update rule
-    q_table[state, action] += ALPHA * (reward + GAMMA * np.max(q_table[next_state]) - q_table[state, action])
+    """
+    Update Q-table using the Q-learning formula:
+    Q(s,a) = Q(s,a) + α[R + γ * max(Q(s',a')) - Q(s,a)]
+    """
+    current_q = q_table[state, action]  # Current Q-value: Q(s,a)
+    next_max_q = np.max(q_table[next_state])  # Future maximum Q-value: max(Q(s',a'))
+    td_error = reward + GAMMA * next_max_q - current_q  # Temporal Difference Error
+    q_table[state, action] = current_q + ALPHA * td_error  # Update Q-value
 
 # Train the agent using Q-learning
 def train_agent():
