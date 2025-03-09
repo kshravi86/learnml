@@ -53,3 +53,41 @@ plt.title("Gaussian Mixture Model Clustering with Bad Initialization")
 plt.show()
 
 # This code is trying to demonstrate the strengths and weaknesses of different clustering algorithms (Hierarchical Clustering, K-Means, and Gaussian Mixture Model) on a non-linearly separable dataset. It shows how these algorithms perform in identifying the two moon-shaped clusters. Additionally, it illustrates the effect of initialization on the Gaussian Mixture Model's performance.
+
+"""
+Mathematical Explanations of the Clustering Algorithms:
+
+1. Hierarchical Clustering (Ward's Method):
+   - Minimizes the total within-cluster variance
+   - Ward's criterion: minimize increase in sum of squares
+   - Distance between clusters A and B:
+     d(A,B) = √[(sum of squares of merged cluster) - (sum of squares of A) - (sum of squares of B)]
+   
+2. K-Means:
+   - Objective: Minimize within-cluster sum of squares (WCSS)
+   - Mathematical formulation:
+     argmin_C Σ_{i=1}^k Σ_{x in c_i} ||x - μ_i||²
+     where:
+     - k is number of clusters
+     - μ_i is the centroid of cluster c_i
+     - ||x - μ_i|| is Euclidean distance
+
+3. Gaussian Mixture Model (GMM):
+   - Probability density function:
+     p(x) = Σ_{k=1}^K π_k N(x|μ_k, Σ_k)
+     where:
+     - π_k are mixing coefficients (Σπ_k = 1)
+     - N(x|μ_k, Σ_k) is Gaussian distribution with mean μ_k and covariance Σ_k
+   - Uses Expectation-Maximization (EM) algorithm:
+     E-step: Compute responsibilities
+     γ(z_ik) = π_k N(x_i|μ_k, Σ_k) / Σ_j π_j N(x_i|μ_j, Σ_j)
+     M-step: Update parameters
+     μ_k = Σ_i γ(z_ik)x_i / Σ_i γ(z_ik)
+     Σ_k = Σ_i γ(z_ik)(x_i - μ_k)(x_i - μ_k)ᵀ / Σ_i γ(z_ik)
+     π_k = Σ_i γ(z_ik) / N
+
+Key Differences:
+- Hierarchical: No assumptions about cluster shape, builds hierarchy
+- K-Means: Assumes spherical clusters, sensitive to initialization
+- GMM: Flexible cluster shapes, probabilistic membership, but more complex
+"""
