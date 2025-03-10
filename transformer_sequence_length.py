@@ -35,3 +35,17 @@ outputs = model(**inputs)
 
 # Print the output
 print(outputs.last_hidden_state.shape)
+
+# Print mathematical explanations
+print("\nTransformer Sequence Length Mathematics:")
+print("-" * 40)
+print(f"Sequence length (n): {max_length}")
+print(f"Self-attention matrix size: {max_length} x {max_length} = {max_length**2} elements")
+print(f"Memory complexity: O(n²) = O({max_length}²)")
+print(f"Number of attention heads in BERT-base: 12")
+print(f"Total attention computations: {max_length**2 * 12:,} per layer")
+print(f"Number of layers in BERT-base: 12")
+print(f"Total attention computations across all layers: {max_length**2 * 12 * 12:,}")
+print("\nThis shows why longer sequences dramatically increase computational requirements.")
+print(f"Doubling sequence length to {max_length*2} would require {(max_length*2)**2 * 12 * 12:,} computations")
+print(f"This is a 4x increase in computational complexity due to the quadratic nature of self-attention.")
