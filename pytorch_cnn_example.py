@@ -107,3 +107,70 @@ with torch.no_grad():  # Disable gradient calculation for inference
 
 # Save the model checkpoint
 torch.save(model.state_dict(), 'cnn_model.pth')  # Save the trained model's state dictionary
+
+def print_cnn_mathematics():
+    print("\nCONVOLUTIONAL NEURAL NETWORK - MATHEMATICAL FOUNDATIONS")
+    print("="*60)
+    
+    print("\n1. CONVOLUTIONAL LAYER MATHEMATICS")
+    print("-"*45)
+    print("• 2D Convolution Operation:")
+    print("  (F * X)[i,j] = Σ_m Σ_n F[m,n]·X[i-m,j-n]")
+    print("• Output Size Formula:")
+    print("  O = [(W - K + 2P)/S] + 1")
+    print("  where: W=input size, K=kernel size, P=padding, S=stride")
+    
+    print("\n2. ACTIVATION FUNCTION (ReLU)")
+    print("-"*45)
+    print("• Formula: f(x) = max(0,x)")
+    print("• Derivative: f'(x) = {1 if x>0, 0 if x<0}")
+    
+    print("\n3. MAX POOLING")
+    print("-"*45)
+    print("• Operation: MaxPool(X)[i,j] = max{X[m,n]: (m,n) ∈ R_{ij}}")
+    print("• Output Size: O = [(W - P)/S]")
+    print("  where: W=input size, P=pool size, S=stride")
+    
+    print("\n4. FULLY CONNECTED LAYER")
+    print("-"*45)
+    print("• Forward Pass: y = Wx + b")
+    print("• Dimensions:")
+    print("  - Layer 1: 32*7*7 → 128")
+    print("  - Layer 2: 128 → 10")
+    
+    print("\n5. LOSS FUNCTION (Cross-Entropy)")
+    print("-"*45)
+    print("• Formula: L = -Σ_i y_i log(ŷ_i)")
+    print("• Softmax Activation:")
+    print("  σ(z)_j = exp(z_j)/Σ_k exp(z_k)")
+    
+    print("\n6. BACKPROPAGATION")
+    print("-"*45)
+    print("• Chain Rule Application:")
+    print("  ∂L/∂w = ∂L/∂y · ∂y/∂z · ∂z/∂w")
+    print("• Weight Update:")
+    print("  w ← w - η·∂L/∂w")
+    print("  where η is learning rate")
+
+def print_model_architecture():
+    print("\nMODEL ARCHITECTURE SPECIFICATIONS")
+    print("="*60)
+    print("\nLayer Configuration:")
+    print("1. Input Layer: 28x28x1 (MNIST image)")
+    print("2. Conv1: 16 filters, 3x3, stride=1, padding=1")
+    print("   → Output: 28x28x16")
+    print("3. ReLU + MaxPool: 2x2, stride=2")
+    print("   → Output: 14x14x16")
+    print("4. Conv2: 32 filters, 3x3, stride=1, padding=1")
+    print("   → Output: 14x14x32")
+    print("5. ReLU + MaxPool: 2x2, stride=2")
+    print("   → Output: 7x7x32")
+    print("6. Flatten: 7*7*32 = 1568 neurons")
+    print("7. FC1: 1568 → 128 neurons")
+    print("8. FC2: 128 → 10 neurons (output)")
+
+# Add these calls at the end of the main execution block
+if __name__ == "__main__":
+    print("\nPrinting Mathematical Documentation:")
+    print_cnn_mathematics()
+    print_model_architecture()
