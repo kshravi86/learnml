@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Run tests to verify the build (optional)
 #RUN pytest --verbose || echo "Tests failed but continuing with the build"
