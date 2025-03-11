@@ -62,3 +62,35 @@ X_test = X_test.astype('float32') / 255
 
 loss, accuracy = model.evaluate(X_test, y_test)
 print(f'Test accuracy: {accuracy:.2f}')
+
+# Mathematical Explanations:
+# 1. Convolutional Layer Mathematics:
+#    - Input shape: (32, 32, 3)
+#    - First Conv2D: 32 filters of size (3,3)
+#        Output size = ((32-3+1), (32-3+1), 32) = (30, 30, 32)
+#    - First MaxPool2D: (2,2)
+#        Output size = (15, 15, 32)
+#
+#    - Second Conv2D: 64 filters of size (3,3)
+#        Output size = ((15-3+1), (15-3+1), 64) = (13, 13, 64)
+#    - Second MaxPool2D: (2,2)
+#        Output size = (6, 6, 64)
+#
+#    - Third Conv2D: 64 filters of size (3,3)
+#        Output size = ((6-3+1), (6-3+1), 64) = (4, 4, 64)
+#
+# 2. Flatten Layer:
+#    - Converts 3D output to 1D: 4 * 4 * 64 = 1024 neurons
+#
+# 3. Dense Layers:
+#    - First Dense: 1024 -> 64 neurons
+#    - Output Dense: 64 -> 10 neurons (one per class)
+#
+# 4. Model Complexity:
+#    - Total trainable parameters:
+#      * First Conv2D:  (3*3*3)*32 + 32 = 896
+#      * Second Conv2D: (3*3*32)*64 + 64 = 18,496
+#      * Third Conv2D:  (3*3*64)*64 + 64 = 36,928
+#      * First Dense:   1024*64 + 64 = 65,600
+#      * Output Dense:  64*10 + 10 = 650
+#      Total: 122,570 parameters
