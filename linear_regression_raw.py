@@ -87,6 +87,45 @@ class LinearRegression:
         ss_residual = np.sum((y - y_pred) ** 2)
         return 1 - (ss_residual / ss_total)
 
+    def print_math(self):
+        """
+        Print the raw mathematical explanation of the Linear Regression model
+        """
+        math_explanation = """
+        Linear Regression Mathematical Foundation:
+
+        1. Model Representation:
+           y = wx + b
+           where:
+           - y is the predicted value
+           - w is the weight (slope)
+           - x is the input feature
+           - b is the bias (y-intercept)
+
+        2. Cost Function (Mean Squared Error):
+           MSE = (1/n) * Σ(y_true - y_pred)²
+           where:
+           - n is number of samples
+           - y_true is actual value
+           - y_pred is predicted value
+
+        3. Gradient Descent Updates:
+           For weights (w):
+           ∂(MSE)/∂w = (2/n) * Σ(y_pred - y_true) * x
+           w = w - learning_rate * ∂(MSE)/∂w
+
+           For bias (b):
+           ∂(MSE)/∂b = (2/n) * Σ(y_pred - y_true)
+           b = b - learning_rate * ∂(MSE)/∂b
+
+        4. R² Score Calculation:
+           R² = 1 - (SS_residual / SS_total)
+           where:
+           - SS_residual = Σ(y_true - y_pred)²
+           - SS_total = Σ(y_true - y_mean)²
+        """
+        print(math_explanation)
+
 # Example usage
 if __name__ == "__main__":
     # Generate sample data
@@ -106,6 +145,9 @@ if __name__ == "__main__":
     print(f"Final weights: {model.weights}")
     print(f"Final bias: {model.bias}")
     print(f"R² score: {model.score(X, y.flatten()):.4f}")
+
+    # Print mathematical explanation
+    model.print_math()
 
 # Mathematical Explanation
 """
