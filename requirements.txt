@@ -5,4 +5,7 @@ matplotlib
 seaborn
 gym
 keras
+torch 
+torchvision 
+torchaudio
 tensorflow
