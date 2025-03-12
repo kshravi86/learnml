@@ -49,3 +49,11 @@ print(f"Total attention computations across all layers: {max_length**2 * 12 * 12
 print("\nThis shows why longer sequences dramatically increase computational requirements.")
 print(f"Doubling sequence length to {max_length*2} would require {(max_length*2)**2 * 12 * 12:,} computations")
 print(f"This is a 4x increase in computational complexity due to the quadratic nature of self-attention.")
+
+print("\nPractical Uses and Applications:")
+print("-" * 40)
+print("1. **Document Summarization:** Processing long documents to create concise summaries.")
+print("2. **Long-form Question Answering:** Answering questions based on extensive context.")
+print("3. **Code Generation:** Generating code from natural language descriptions, which can involve long sequences of code.")
+print("4. **Genomic Sequence Analysis:** Analyzing long DNA or RNA sequences.")
+print("5. **Dialogue Generation:** Maintaining context over long conversations for more coherent responses.")
