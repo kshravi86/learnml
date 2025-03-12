@@ -291,3 +291,33 @@ def print_detailed_math_analysis():
 if __name__ == "__main__":
     print_mathematical_details()
     print_detailed_math_analysis()
+
+"""
+USE CASES FOR EACH CLUSTERING ALGORITHM
+
+1. Hierarchical Clustering Use Cases:
+   - Taxonomic classification in biology (organizing species into hierarchies)
+   - Document organization and topic hierarchy creation
+   - Customer segmentation with nested groups
+   - Social network analysis and community detection
+   - Gene expression clustering in bioinformatics
+
+2. K-Means Clustering Use Cases:
+   - Market segmentation with well-defined, spherical clusters
+   - Image compression (color quantization)
+   - Anomaly detection in spherical data distributions
+   - Customer segmentation with equal-sized groups
+   - Data preprocessing for dimensionality reduction
+
+3. Gaussian Mixture Model (GMM) Use Cases:
+   - Speech recognition and speaker identification
+   - Financial market regime detection
+   - Complex pattern recognition in astronomy
+   - Behavior modeling in robotics
+   - Image segmentation with overlapping regions
+
+Selection Guidelines:
+- Use Hierarchical when: You need a hierarchy, don't know cluster count, or have small datasets
+- Use K-Means when: You have spherical clusters, need speed, or have large datasets
+- Use GMM when: You have overlapping clusters, need probability scores, or have complex shapes
+"""
