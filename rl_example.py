@@ -89,7 +89,9 @@ def train_agent():
         
         while not done:
             action = choose_action(state, EPSILON)
-            next_state, reward, done, _ = env.step(action)
+            # Handle the new gym API return format
+            next_state, reward, terminated, truncated, _ = env.step(action)
+            done = terminated or truncated
             next_state = next_state[0] if isinstance(next_state, tuple) else next_state
             rewards += reward
             steps += 1
@@ -111,24 +113,55 @@ def train_agent():
 def play_game():
     """Use the trained Q-table to play the game"""
     print("\n=== Starting Game with Trained Agent ===")
-    state = env.reset()[0]  # Add [0] to get the state value
-    done = False
-    total_reward = 0
-    steps = 0
-    
-    while not done:
-        steps += 1
-        action = np.argmax(q_table[state])
-        next_state, reward, done, _ = env.step(action)
-        state = next_state[0] if isinstance(next_state, tuple) else next_state
-        total_reward += reward
-        env.render()
-        print(f"Step {steps}: State {state}, Action {action}")
-    
-    print("\n=== Game Finished ===")
-    print(f"Total Steps: {steps}")
-    print(f"Total Reward: {total_reward}")
-    print("Result: " + ("Success!" if total_reward > 0 else "Failure"))
+    try:
+        # Initialize state and validate
+        initial_state = env.reset()
+        state = initial_state[0] if isinstance(initial_state, tuple) else initial_state
+        if state is None:
+            raise ValueError("Invalid initial state received from environment")
+
+        done = False
+        total_reward = 0
+        steps = 0
+        
+        while not done and steps < 1000:  # Add step limit to prevent infinite loops
+            steps += 1
+            # Ensure state is within valid range
+            state = min(max(state, 0), env.observation_space.n - 1)
+            action = np.argmax(q_table[state])
+            
+            try:
+                next_state, reward, terminated, truncated, _ = env.step(action)
+                done = terminated or truncated
+                # Validate and process next state
+                state = next_state[0] if isinstance(next_state, tuple) else next_state
+                state = min(max(state, 0), env.observation_space.n - 1)
+                total_reward += reward
+                
+                try:
+                    env.render()
+                except Exception as e:
+                    print(f"Warning: Render failed but continuing execution: {e}")
+                
+                print(f"Step {steps}: State {state}, Action {action}")
+                
+            except Exception as e:
+                print(f"Error during step execution: {e}")
+                break
+        
+        print("\n=== Game Finished ===")
+        print(f"Total Steps: {steps}")
+        print(f"Total Reward: {total_reward}")
+        print("Result: " + ("Success!" if total_reward > 0 else "Failure"))
+        
+    except Exception as e:
+        print(f"Fatal error during game execution: {e}")
+        print("Attempting to close environment gracefully...")
+    finally:
+        try:
+            env.close()
+        except:
+            pass
 
 # Main execution
 print("\n=== Q-Learning Agent for FrozenLake ===")
