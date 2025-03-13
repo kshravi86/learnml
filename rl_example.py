@@ -71,47 +71,63 @@ def update_q_table(state, action, next_state, reward):
 # Train the agent using Q-learning
 def train_agent():
     """Train the agent using Q-learning"""
-    # Train the agent for NUM_EPISODES episodes
+    print("\n=== Starting Q-Learning Training ===")
+    print(f"Training for {NUM_EPISODES} episodes in {ENV_NAME} environment")
+    print("Training progress:")
+    
+    # Track successful episodes
+    successes = 0
+    
     for episode in range(NUM_EPISODES):
-        # Reset the environment and initialize the rewards
         state = env.reset()
         done = False
         rewards = 0
+        steps = 0
+        
         while not done:
-            # Choose an action using epsilon-greedy policy
             action = choose_action(state, EPSILON)
-            # Take a step in the environment
             next_state, reward, done, _ = env.step(action)
-            # Update the rewards
             rewards += reward
-            # Update the Q-table
+            steps += 1
             update_q_table(state, action, next_state, reward)
-            # Update the state
             state = next_state
-        # Print the episode and total rewards
-        print(f'Episode {episode+1}, Total Rewards: {rewards}')
+        
+        # Update success count
+        if rewards > 0:
+            successes += 1
+        
+        # Print progress every 100 episodes
+        if (episode + 1) % 100 == 0:
+            success_rate = (successes / (episode + 1)) * 100
+            print(f"Episode {episode + 1}/{NUM_EPISODES} | Success Rate: {success_rate:.1f}% | Last Episode Steps: {steps}")
+    
+    print("\n=== Training Complete ===")
+    print(f"Final Success Rate: {(successes/NUM_EPISODES)*100:.1f}%")
 
-# Use the trained Q-table to play the game
 def play_game():
     """Use the trained Q-table to play the game"""
-    # Reset the environment
+    print("\n=== Starting Game with Trained Agent ===")
     state = env.reset()
     done = False
+    total_reward = 0
+    steps = 0
+    
     while not done:
-        # Choose the action with the highest Q-value
+        steps += 1
         action = np.argmax(q_table[state])
-        # Take a step in the environment
-        state, _, done, _ = env.step(action)
-        # Render the environment
+        state, reward, done, _ = env.step(action)
+        total_reward += reward
         env.render()
+        print(f"Step {steps}: State {state}, Action {action}")
+    
+    print("\n=== Game Finished ===")
+    print(f"Total Steps: {steps}")
+    print(f"Total Reward: {total_reward}")
+    print("Result: " + ("Success!" if total_reward > 0 else "Failure"))
 
+# Main execution
+print("\n=== Q-Learning Agent for FrozenLake ===")
+print("Training agent...")
 train_agent()
+print("\nStarting gameplay demonstration...")
 play_game()
-
-# Use the trained Q-table to play the game
-state = env.reset()
-done = False
-while not done:
-    action = np.argmax(q_table[state])
-    state, _, done, _ = env.step(action)
-    env.render()
