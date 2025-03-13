@@ -33,6 +33,9 @@ def choose_action(state, epsilon):
     P(random action) = ε
     P(greedy action) = 1 - ε
     """
+    # Convert state to integer if it's a tuple
+    state = state[0] if isinstance(state, tuple) else state
+    
     # Randomly choose an action with probability epsilon
     if np.random.rand() < epsilon:
         return env.action_space.sample()
@@ -79,7 +82,7 @@ def train_agent():
     successes = 0
     
     for episode in range(NUM_EPISODES):
-        state = env.reset()
+        state = env.reset()[0]  # Add [0] to get the state value
         done = False
         rewards = 0
         steps = 0
@@ -87,6 +90,7 @@ def train_agent():
         while not done:
             action = choose_action(state, EPSILON)
             next_state, reward, done, _ = env.step(action)
+            next_state = next_state[0] if isinstance(next_state, tuple) else next_state
             rewards += reward
             steps += 1
             update_q_table(state, action, next_state, reward)
@@ -107,7 +111,7 @@ def train_agent():
 def play_game():
     """Use the trained Q-table to play the game"""
     print("\n=== Starting Game with Trained Agent ===")
-    state = env.reset()
+    state = env.reset()[0]  # Add [0] to get the state value
     done = False
     total_reward = 0
     steps = 0
@@ -115,7 +119,8 @@ def play_game():
     while not done:
         steps += 1
         action = np.argmax(q_table[state])
-        state, reward, done, _ = env.step(action)
+        next_state, reward, done, _ = env.step(action)
+        state = next_state[0] if isinstance(next_state, tuple) else next_state
         total_reward += reward
         env.render()
         print(f"Step {steps}: State {state}, Action {action}")
