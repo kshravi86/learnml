@@ -133,4 +133,27 @@ def print_model_mathematics():
     total_params = (32 * 3 * 3 * 1 + 32) + dense1_params + dense2_params
     print(f"\nTotal trainable parameters: {total_params}")
 
+def visualize_network():
+    print("\nNetwork Architecture Visualization:")
+    print("==================================")
+    print("Input Layer (8x8x1)")
+    print("     ⋮⋮⋮")
+    print("     |||")
+    print("Conv2D (32 filters)")
+    print("  \\|||///")
+    print("   ⋮⋮⋮⋮⋮")
+    print("MaxPooling2D")
+    print("   \\|||/")
+    print("    ⋮⋮⋮")
+    print("Flatten")
+    print("   |||||")
+    print("Dense (64)")
+    print("    |||")
+    print("    ⋮⋮⋮")
+    print("Output (10)")
+    print("     |")
+    print("   [0-9]")
+
+# Call the visualization after mathematical computations
 print_model_mathematics()
+visualize_network()
