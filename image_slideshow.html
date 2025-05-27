@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slideshow</title>
+    <style>
+        body { display: flex; flex-direction: column; align-items: center; font-family: sans-serif; }
+        #imageContainer { margin-top: 20px; width: 80%; max-width: 800px; min-height: 400px; border: 1px solid #ccc; display: flex; justify-content: center; align-items: center; }
+        #imageDisplay { max-width: 100%; max-height: 500px; object-fit: contain; }
+        #message { margin-top: 10px; font-style: italic; }
+    </style>
+</head>
+<body>
+    <h1>Image Slideshow from Folder</h1>
+    <input type="file" id="folderInput" webkitdirectory multiple directory />
+    <div id="imageContainer">
+        <img id="imageDisplay" src="" alt="Selected image will appear here" />
+    </div>
+    <p id="message">Please select a folder to start the slideshow.</p>
+
+    <script>
+    const folderInput = document.getElementById('folderInput');
+    const imageDisplay = document.getElementById('imageDisplay');
+    const message = document.getElementById('message');
+    let imageFiles = [];
+    let currentImageIndex = 0;
+    let slideshowInterval; // Variable to store the interval ID
+
+    folderInput.addEventListener('change', function(event) {
+        if (slideshowInterval) {
+            clearInterval(slideshowInterval); // Clear existing interval on new selection
+        }
+        imageFiles = []; // Reset on new folder selection
+        const files = event.target.files;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.type.startsWith('image/')) {
+                imageFiles.push(file);
+            }
+        }
+
+        if (imageFiles.length === 0) {
+            message.textContent = 'No images found in the selected folder.';
+            imageDisplay.src = '';
+            imageDisplay.alt = 'No images found.';
+            // No need to clear slideshowInterval here again, it's done at the start of this handler
+        } else {
+            message.textContent = `Found ${imageFiles.length} image(s). Starting slideshow...`;
+            startSlideshow();
+        }
+    });
+
+    function displayImage() {
+        if (imageFiles.length > 0) {
+            // Revoke the old object URL if one exists to free memory
+            if (imageDisplay.src && imageDisplay.src.startsWith('blob:')) {
+                URL.revokeObjectURL(imageDisplay.src);
+            }
+            const imageUrl = URL.createObjectURL(imageFiles[currentImageIndex]);
+            imageDisplay.src = imageUrl;
+            imageDisplay.alt = imageFiles[currentImageIndex].name;
+        }
+    }
+
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % imageFiles.length; // Loop back to 0 if at the end
+        displayImage();
+    }
+
+    function startSlideshow() {
+        if (imageFiles.length > 0) {
+            currentImageIndex = 0; // Start from the first image
+            displayImage(); // Display the first image immediately
+            // Clear existing interval before starting a new one (though already done in event listener, good for safety)
+            if (slideshowInterval) {
+                clearInterval(slideshowInterval);
+            }
+            slideshowInterval = setInterval(nextImage, 10000); // Change image every 10 seconds
+        }
+    }
+    </script>
+</body>
+</html>
