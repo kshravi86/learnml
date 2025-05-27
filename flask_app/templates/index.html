@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Items</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Items</h1>
+        <a href="{{ url_for('create_item_form') }}" class="button">Add New Item</a>
+        <ul>
+            {% for item in items %}
+            <li>
+                {{ item.name }} - {{ item.description }}
+                <a href="{{ url_for('get_item_detail', item_id=item.id) }}">View</a>
+                <a href="{{ url_for('edit_item_form', item_id=item.id) }}">Edit</a>
+                <form action="{{ url_for('delete_item_html', item_id=item.id) }}" method="post" style="display:inline;">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
