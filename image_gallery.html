@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image Gallery</title>
+<style>
+  body {
+    font-family: sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #imageContainer {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  }
+  img {
+    max-width: 500px;
+    max-height: 400px;
+    display: block;
+    margin: 0 auto;
+  }
+  .controls {
+    margin-top: 10px;
+    text-align: center;
+  }
+  button {
+    padding: 8px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  input[type="file"] {
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+  <input type="file" id="folderInput" webkitdirectory directory multiple />
+
+  <div id="imageContainer">
+    <img id="currentImage" src="#" alt="Selected Image">
+  </div>
+
+  <div class="controls">
+    <button id="prevButton">Previous</button>
+    <button id="nextButton">Next</button>
+  </div>
+
+<script>
+const folderInput = document.getElementById('folderInput');
+const currentImage = document.getElementById('currentImage');
+const prevButton = document.getElementById('prevButton');
+const nextButton = document.getElementById('nextButton');
+
+let images = [];
+let currentIndex = 0;
+
+folderInput.addEventListener('change', function(event) {
+  images = []; // Clear previous images
+  currentIndex = 0;
+  const files = event.target.files;
+  const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+
+  if (imageFiles.length === 0) {
+    currentImage.src = "#";
+    currentImage.alt = "No images found in the selected folder.";
+    alert("No image files found in the selected folder. Please select a folder containing JPG, PNG, or GIF images.");
+    return;
+  }
+
+  // Create Object URLs for each image file
+  imageFiles.forEach(file => {
+    images.push(URL.createObjectURL(file));
+  });
+
+  displayImage();
+});
+
+function displayImage() {
+  if (images.length > 0) {
+    currentImage.src = images[currentIndex];
+    currentImage.alt = `Image ${currentIndex + 1} of ${images.length}`;
+  } else {
+    currentImage.src = "#";
+    currentImage.alt = "No image selected or found.";
+  }
+  updateButtonStates();
+}
+
+function updateButtonStates() {
+  prevButton.disabled = currentIndex === 0;
+  nextButton.disabled = currentIndex === images.length - 1 || images.length === 0;
+}
+
+prevButton.addEventListener('click', function() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    displayImage();
+  }
+});
+
+nextButton.addEventListener('click', function() {
+  if (currentIndex < images.length - 1) {
+    currentIndex++;
+    displayImage();
+  }
+});
+
+// Initial button states
+updateButtonStates();
+</script>
+
+</body>
+</html>
