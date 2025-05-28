@@ -1,12 +1,3 @@
-numpy
-pandas
-scikit-learn
-matplotlib
-seaborn
-gym
-keras
-torch 
-torchvision 
-torchaudio
-tensorflow
-unsloth
+Flask
+Flask-SQLAlchemy
+psycopg2-binary
