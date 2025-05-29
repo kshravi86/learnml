@@ -1,0 +1,13 @@
+{% extends "items_app/base.html" %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block content %}
+    <h1>Confirm Delete: {{ item.name }}</h1>
+    <p>Are you sure you want to delete "{{ item.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="button delete-button">Yes, delete</button>
+        <a href="{% url 'items_app:item_detail' item.pk %}" class="button">Cancel</a>
+    </form>
+{% endblock %}

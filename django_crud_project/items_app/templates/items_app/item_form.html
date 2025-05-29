@@ -1,0 +1,16 @@
+{% extends "items_app/base.html" %}
+
+{% block title %}{{ form_title|default:"Item Form" }}{% endblock %}
+
+{% block content %}
+    <h1>{{ form_title|default:"Submit Item" }}</h1>
+    {# The action URL will be determined by the view, either create or update #}
+    <form method="post"> 
+        {% csrf_token %}
+        {{ form.as_p }} 
+        {# form.as_p renders form fields as paragraphs. Use form.as_table or loop for more control #}
+        <button type="submit" class="button">Save Item</button>
+    </form>
+    <br>
+    <a href="{% if item %}{% url 'items_app:item_detail' item.pk %}{% else %}{% url 'items_app:item_list' %}{% endif %}">Cancel</a>
+{% endblock %}

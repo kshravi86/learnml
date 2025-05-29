@@ -1,0 +1,22 @@
+{% extends "items_app/base.html" %}
+
+{% block title %}Items List{% endblock %}
+
+{% block content %}
+    <h1>Items</h1>
+    <a href="{% url 'items_app:item_create' %}" class="button">Add New Item</a>
+    {% if items %}
+        <ul>
+            {% for item in items %}
+                <li>
+                    <a href="{% url 'items_app:item_detail' item.pk %}">{{ item.name }}</a>
+                    <p>{{ item.description|truncatewords:20 }}</p>
+                    <a href="{% url 'items_app:item_update' item.pk %}" class="button">Edit</a>
+                    <a href="{% url 'items_app:item_delete' item.pk %}" class="button delete-button">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No items found.</p>
+    {% endif %}
+{% endblock %}

@@ -1,10 +1,8 @@
-# 🚀 FastAPI PostgreSQL CRUD Application
+# 🏛️ Django Traditional CRUD Application
 
 ## 📝 Overview
 
-This project is a RESTful API built with FastAPI and PostgreSQL, demonstrating Create, Read, Update, and Delete (CRUD) operations for "Items". FastAPI provides high performance and automatic interactive API documentation.
-
-You can access the interactive API documentation (Swagger UI) at `/docs` and ReDoc at `/redoc` when the application is running.
+This project is a web application built with Django, demonstrating traditional server-side CRUD (Create, Read, Update, Delete) operations for "Items". It utilizes Django's ORM for database interaction with PostgreSQL, Django Forms for data validation and input, and Django Templates for rendering HTML.
 
 ## 📋 Prerequisites
 
@@ -19,7 +17,7 @@ You can access the interactive API documentation (Swagger UI) at `/docs` and ReD
     ```bash
     git clone <repository-url>
     cd <project-directory>
-    git checkout feat/fastapi-crud # Ensure you are on the correct branch
+    git checkout feat/django-traditional-crud # Or the current branch name
     ```
     (Replace `<repository-url>` and `<project-directory>` accordingly)
 
@@ -30,80 +28,110 @@ You can access the interactive API documentation (Swagger UI) at `/docs` and ReD
     ```
 
 3.  📦 **Install dependencies:**
-    Make sure your `requirements.txt` reflects FastAPI dependencies.
+    Make sure your `requirements.txt` reflects Django dependencies.
     ```bash
     pip install -r requirements.txt
     ```
 
-4.  💾 **Database Setup:**
+4.  ⚙️ **Configure Project Settings:**
+    *   Navigate to `django_crud_project/` (the directory containing `manage.py`).
+
+5.  💾 **Database Setup:**
     *   Ensure your PostgreSQL server is running and you have access to it.
-    *   Create a new database (e.g., `fastapidb`) and a user/role with appropriate permissions.
-    *   ⚠️ **Update `SQLALCHEMY_DATABASE_URL` in `fastapi_app/database.py`** with your actual PostgreSQL username, password, host, and database name. For example:
+    *   Create a new database (e.g., `djangocruddb`) and a user/role with appropriate permissions.
+    *   ⚠️ **Update `DATABASES` setting in `django_crud_project/django_crud_project/settings.py`** with your actual PostgreSQL credentials (username, password, host, database name). For example:
         ```python
-        SQLALCHEMY_DATABASE_URL = "postgresql://youruser:yourpassword@localhost/fastapidb"
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'your_db_name',
+                'USER': 'your_db_user',
+                'PASSWORD': 'your_db_password',
+                'HOST': 'localhost',
+                'PORT': '5432',
+            }
+        }
         ```
-    *   📜 Run the database setup script to create the necessary tables:
+    *   Run database migrations (from the directory containing `manage.py`):
         ```bash
-        python fastapi_app/database_setup.py
+        python manage.py makemigrations items_app
+        python manage.py migrate
         ```
+
+6.  👤 **Create a Superuser (for Admin Panel):** (Optional, but recommended)
+    Run the following command from the directory containing `manage.py`:
+    ```bash
+    python manage.py createsuperuser
+    ```
+    Follow the prompts to create an admin user.
 
 ## ▶️ Running the Application
 
-### 🖥️ Without Docker:
+### 🖥️ Without Docker (Development Server):
 
-1.  Ensure your virtual environment is activated.
-2.  Run the Uvicorn server (from the project root directory):
+1.  Ensure your virtual environment is activated and you are in the `django_crud_project` directory (the one containing `manage.py`).
+2.  Run the development server:
     ```bash
-    uvicorn fastapi_app.main:app --reload --host 0.0.0.0 --port 8000
+    python manage.py runserver
     ```
-    The `--reload` flag enables auto-reloading for development.
-3.  Access the API at `http://127.0.0.1:8000`.
-4.  Interactive API documentation:
-    *   Swagger UI: 🔗 `http://127.0.0.1:8000/docs`
-    *   ReDoc: 🔗 `http://127.0.0.1:8000/redoc`
+3.  Access the application at: 🔗 `http://127.0.0.1:8000/items/`
+4.  Access Django Admin: 🔗 `http://127.0.0.1:8000/admin/` (login with your superuser credentials)
 
 ### 🐳 With Docker:
 
 1.  **Build the Docker image:**
     ```bash
-    docker build -t fastapi-crud-app .
+    docker build -t django-crud-app .
     ```
 2.  **Run the Docker container:**
-    *   Ensure your PostgreSQL database is accessible from within the Docker container. This might mean updating `SQLALCHEMY_DATABASE_URL` in `fastapi_app/database.py` to use your host machine's IP address as seen from Docker (e.g., `host.docker.internal` on Docker Desktop for Mac/Windows, or your machine's network IP) and then rebuilding the image. Alternatively, run PostgreSQL in another Docker container and use Docker networking.
+    *   Ensure your PostgreSQL database is accessible from within the Docker container. This might mean updating the `DATABASES` setting in `django_crud_project/django_crud_project/settings.py` to use your host machine's IP address as seen from Docker (e.g., `host.docker.internal` on Docker Desktop for Mac/Windows, or your machine's network IP) and then rebuilding the image. Alternatively, run PostgreSQL in another Docker container and use Docker networking.
+    *   You might also need to run migrations within the Docker container the first time or use an entrypoint script to handle this. For simplicity, this example assumes migrations are handled or the DB is already set up.
     ```bash
-    docker run -p 8000:8000 fastapi-crud-app
+    docker run -p 8000:8000 django-crud-app
     ```
-3.  Access the API and interactive docs as listed above (e.g., `http://127.0.0.1:8000/docs`).
+3.  Access the application as listed above (e.g., `http://127.0.0.1:8000/items/`).
 
 ## ✅ Running Tests
 
-🧪 Ensure your virtual environment is activated and dependencies are installed.
-From the project root directory:
+🧪 Ensure your virtual environment is activated and you are in the `django_crud_project` directory (the one containing `manage.py`).
 ```bash
-python -m unittest discover -s tests -p "test_fastapi_app.py"
-# If you have tests for both Flask and FastAPI and want to run all:
-# python -m unittest discover -s tests -p "test_*.py"
+python manage.py test items_app
+# Or to run all tests discovered in the project:
+# python manage.py test
 ```
-This command will discover and run tests specifically for the FastAPI application.
+This command will discover and run tests specifically for the `items_app` or all apps.
 
 ## 📂 Application Structure
 
 🌳
 ```
 .
-├── fastapi_app/              # Main FastAPI application package
-│   ├── __init__.py           # Marks fastapi_app as a Python package
-│   ├── main.py               # FastAPI app instance, path operations (routes)
-│   ├── crud.py               # Reusable functions for database interactions (CRUD logic)
-│   ├── models.py             # SQLAlchemy models (database table definitions)
-│   ├── schemas.py            # Pydantic models (data validation and serialization)
-│   ├── database.py           # Database engine, session, and Base setup for SQLAlchemy
-│   └── database_setup.py     # Script to create database tables
-├── tests/                    # Unit tests
-│   ├── test_app.py           # (If Flask tests are still present on this branch)
-│   └── test_fastapi_app.py   # Tests for the FastAPI application
-├── .gitignore                # Files and directories to ignore for Git
-├── Dockerfile                # For building the FastAPI Docker image
-├── requirements.txt          # Python dependencies for FastAPI
-└── README.md                 # This file (FastAPI version)
+├── django_crud_project/      # Root directory for the Django project.
+│   ├── manage.py             # Django's command-line utility.
+│   ├── django_crud_project/  # Inner Python package for project configurations.
+│   │   ├── __init__.py
+│   │   ├── settings.py       # Project settings (DB config, installed apps, etc.).
+│   │   ├── urls.py           # Project-level URL routing.
+│   │   ├── wsgi.py           # WSGI configuration.
+│   │   └── asgi.py           # ASGI configuration.
+│   ├── items_app/            # The application for handling items.
+│   │   ├── __init__.py
+│   │   ├── models.py         # Database models for items.
+│   │   ├── views.py          # View functions for handling requests.
+│   │   ├── forms.py          # Django forms for item creation/editing.
+│   │   ├── urls.py           # URL routing for the items_app.
+│   │   ├── templates/
+│   │   │   └── items_app/    # HTML templates for the items_app.
+│   │   │       ├── base.html
+│   │   │       ├── item_list.html
+│   │   │       ├── item_detail.html
+│   │   │       ├── item_form.html
+│   │   │       └── item_confirm_delete.html
+│   │   ├── admin.py          # Admin site configuration for models.
+│   │   ├── tests.py          # Unit tests for the app.
+│   │   └── migrations/       # Database migration files.
+│   │       └── __init__.py
+├── Dockerfile                # For building the Django Docker image.
+├── requirements.txt          # Python dependencies (Django, psycopg2-binary, etc.).
+└── README.md                 # This file (Django Traditional Views version).
 ```

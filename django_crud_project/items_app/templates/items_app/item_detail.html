@@ -1,0 +1,15 @@
+{% extends "items_app/base.html" %}
+
+{% block title %}{{ item.name }} Details{% endblock %}
+
+{% block content %}
+    <h1>{{ item.name }}</h1>
+    <p><strong>ID:</strong> {{ item.id }}</p>
+    <p><strong>Description:</strong></p>
+    <p>{{ item.description|linebreaksbr }}</p>
+    <hr>
+    <a href="{% url 'items_app:item_update' item.pk %}" class="button">Edit Item</a>
+    <a href="{% url 'items_app:item_delete' item.pk %}" class="button delete-button">Delete Item</a>
+    <br><br>
+    <a href="{% url 'items_app:item_list' %}">Back to list</a>
+{% endblock %}
