@@ -1,8 +1,10 @@
-# 🚀 Flask PostgreSQL CRUD Application
+# 🚀 FastAPI PostgreSQL CRUD Application
 
 ## 📝 Overview
 
-This is a simple web application built with Flask and PostgreSQL that demonstrates Create, Read, Update, and Delete (CRUD) operations. It provides both a JSON API and an HTML web interface for interacting with a database of "Items".
+This project is a RESTful API built with FastAPI and PostgreSQL, demonstrating Create, Read, Update, and Delete (CRUD) operations for "Items". FastAPI provides high performance and automatic interactive API documentation.
+
+You can access the interactive API documentation (Swagger UI) at `/docs` and ReDoc at `/redoc` when the application is running.
 
 ## 📋 Prerequisites
 
@@ -13,40 +15,36 @@ This is a simple web application built with Flask and PostgreSQL that demonstrat
 
 ## 🛠️ Setup Instructions
 
-1.  🔗 **Clone the repository:**
+1.  🔗 **Clone the repository and checkout the branch:**
     ```bash
     git clone <repository-url>
-    ```
-    (Replace `<repository-url>` with the actual URL of this repository)
-
-2.  📁 **Navigate to the project directory:**
-    ```bash
     cd <project-directory>
+    git checkout feat/fastapi-crud # Ensure you are on the correct branch
     ```
-    (Replace `<project-directory>` with the name of the cloned folder)
+    (Replace `<repository-url>` and `<project-directory>` accordingly)
 
-3.  🌿 **Create and activate a virtual environment:**
+2.  🌿 **Create and activate a virtual environment:**
     ```bash
     python -m venv venv
     source venv/bin/activate  # On Windows use: venv\Scripts\activate
     ```
 
-4.  📦 **Install dependencies:**
+3.  📦 **Install dependencies:**
+    Make sure your `requirements.txt` reflects FastAPI dependencies.
     ```bash
     pip install -r requirements.txt
     ```
 
-5.  💾 **Database Setup:**
+4.  💾 **Database Setup:**
     *   Ensure your PostgreSQL server is running and you have access to it.
-    *   Create a new database (e.g., `mydatabase`) and a user/role (e.g., `user`) with appropriate permissions (e.g., ability to connect, create tables, CRUD operations on the database).
-    *   ⚠️ **Crucially, update the `SQLALCHEMY_DATABASE_URI` in `flask_app/app.py`**. Open the file `flask_app/app.py` and modify the line:
+    *   Create a new database (e.g., `fastapidb`) and a user/role with appropriate permissions.
+    *   ⚠️ **Update `SQLALCHEMY_DATABASE_URL` in `fastapi_app/database.py`** with your actual PostgreSQL username, password, host, and database name. For example:
         ```python
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost/mydatabase'
+        SQLALCHEMY_DATABASE_URL = "postgresql://youruser:yourpassword@localhost/fastapidb"
         ```
-        Replace `user`, `password`, `localhost`, and `mydatabase` with your actual PostgreSQL username, password, host, and database name.
     *   📜 Run the database setup script to create the necessary tables:
         ```bash
-        python flask_app/database_setup.py
+        python fastapi_app/database_setup.py
         ```
 
 ## ▶️ Running the Application
@@ -54,62 +52,58 @@ This is a simple web application built with Flask and PostgreSQL that demonstrat
 ### 🖥️ Without Docker:
 
 1.  Ensure your virtual environment is activated.
-2.  Set the Flask application environment variable:
+2.  Run the Uvicorn server (from the project root directory):
     ```bash
-    export FLASK_APP=flask_app.app  # On Windows use: set FLASK_APP=flask_app.app
+    uvicorn fastapi_app.main:app --reload --host 0.0.0.0 --port 8000
     ```
-3.  Run the Flask development server:
-    ```bash
-    flask run
-    ```
-4.  Access the application:
-    *   🔗 HTML UI: [http://127.0.0.1:5000/ui/items](http://127.0.0.1:5000/ui/items)
-    *   🔗 JSON API: [http://127.0.0.1:5000/items](http://127.0.0.1:5000/items)
+    The `--reload` flag enables auto-reloading for development.
+3.  Access the API at `http://127.0.0.1:8000`.
+4.  Interactive API documentation:
+    *   Swagger UI: 🔗 `http://127.0.0.1:8000/docs`
+    *   ReDoc: 🔗 `http://127.0.0.1:8000/redoc`
 
 ### 🐳 With Docker:
 
 1.  **Build the Docker image:**
     ```bash
-    docker build -t flask-crud-app .
+    docker build -t fastapi-crud-app .
     ```
 2.  **Run the Docker container:**
-    *   Ensure your PostgreSQL database is accessible from within the Docker container. This might mean:
-        *   If PostgreSQL is running on your host, you might need to change `localhost` in `SQLALCHEMY_DATABASE_URI` (inside `flask_app/app.py`, then rebuild the image) to your host machine's IP address as seen from Docker (e.g., `host.docker.internal` on Docker Desktop for Mac/Windows, or your machine's network IP).
-        *   Alternatively, run PostgreSQL in another Docker container and use Docker networking.
+    *   Ensure your PostgreSQL database is accessible from within the Docker container. This might mean updating `SQLALCHEMY_DATABASE_URL` in `fastapi_app/database.py` to use your host machine's IP address as seen from Docker (e.g., `host.docker.internal` on Docker Desktop for Mac/Windows, or your machine's network IP) and then rebuilding the image. Alternatively, run PostgreSQL in another Docker container and use Docker networking.
     ```bash
-    docker run -p 5000:5000 flask-crud-app
+    docker run -p 8000:8000 fastapi-crud-app
     ```
-3.  Access the application as above (e.g., 🔗 `http://127.0.0.1:5000/ui/items`).
+3.  Access the API and interactive docs as listed above (e.g., `http://127.0.0.1:8000/docs`).
 
 ## ✅ Running Tests
 
-Ensure your virtual environment is activated and dependencies are installed.
-🧪
+🧪 Ensure your virtual environment is activated and dependencies are installed.
+From the project root directory:
 ```bash
-python -m unittest discover -s tests -p "test_*.py"
+python -m unittest discover -s tests -p "test_fastapi_app.py"
+# If you have tests for both Flask and FastAPI and want to run all:
+# python -m unittest discover -s tests -p "test_*.py"
 ```
-This command will discover and run all tests located in the `tests` directory.
+This command will discover and run tests specifically for the FastAPI application.
 
 ## 📂 Application Structure
 
 🌳
 ```
 .
-├── flask_app/                # Main application package
-│   ├── app.py                # Flask application, routes, DB initialization
-│   ├── models.py             # SQLAlchemy database models
-│   ├── database_setup.py     # Script to create database tables
-│   ├── static/               # Static files (CSS, JavaScript)
-│   │   └── style.css
-│   ├── templates/            # HTML templates
-│   │   ├── index.html
-│   │   ├── item_detail.html
-│   │   └── item_form.html
-│   └── .gitkeep              # (Placeholder if static/templates were empty)
+├── fastapi_app/              # Main FastAPI application package
+│   ├── __init__.py           # Marks fastapi_app as a Python package
+│   ├── main.py               # FastAPI app instance, path operations (routes)
+│   ├── crud.py               # Reusable functions for database interactions (CRUD logic)
+│   ├── models.py             # SQLAlchemy models (database table definitions)
+│   ├── schemas.py            # Pydantic models (data validation and serialization)
+│   ├── database.py           # Database engine, session, and Base setup for SQLAlchemy
+│   └── database_setup.py     # Script to create database tables
 ├── tests/                    # Unit tests
-│   └── test_app.py
+│   ├── test_app.py           # (If Flask tests are still present on this branch)
+│   └── test_fastapi_app.py   # Tests for the FastAPI application
 ├── .gitignore                # Files and directories to ignore for Git
-├── Dockerfile                # For building the Docker image
-├── requirements.txt          # Python dependencies
-└── README.md                 # This file
+├── Dockerfile                # For building the FastAPI Docker image
+├── requirements.txt          # Python dependencies for FastAPI
+└── README.md                 # This file (FastAPI version)
 ```
